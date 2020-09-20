@@ -2,7 +2,7 @@ var passport = require("passport");
 const keys = require("../../config/keys");
 const GoogleStrategy = require("passport-google-oauth20").Strategy;
 
-const User = require("./services/models/User.js");
+const User = require("../../models/User.js");
 
 // Take User and transform it into corresponding cookie id
 passport.serializeUser((user, done) => {
@@ -16,18 +16,18 @@ passport.deserializeUser((id, done) => {
     });
 });
 
-
 passport.use(new GoogleStrategy({
     clientID: keys.GOOGLE_CLIENT_ID,
     clientSecret: keys.GOOGLE_CLIENT_SECRET,
     callbackURL: "/auth/google/callback"
-}), (accessToken, refreshToken, profile, cb) => {
+}, function(accessToken, refreshToken, profile, cb) {
     User.findOne({googleId: profile.id}, (err, user) => {
         if (err) {
             console.log("Error finding user: " + err);
         } else {
             if (user) {
                 // user exists
+                console.log(user);
                 cb(null, user);
             } else {
                 // user needs to be created
@@ -35,10 +35,12 @@ passport.use(new GoogleStrategy({
                     if (err) {
                         console.log("Error creating user: " + err);
                     } else {
+                        console.log("created new user");
+                        console.log(user);
                         cb(null, newUser);
                     }
                 })
             }
         }
     })
-});
+}));

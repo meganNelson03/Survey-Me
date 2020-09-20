@@ -9,8 +9,15 @@ const keys = require("./config/keys");
 require("./models/User.js");
 require("./services/passport/passport");
 
+//....APP CONFIG.....
+app.use(express.static(__dirname + "/services"));
+
+
 //....MONGODB CONFIG....
-mongoose.connect(keys.MONGODB_URI);
+mongoose.connect(keys.MONGODB_URI, (err, connection) => {
+    if (err) throw err;
+    console.log("Connection successful.")
+});
 
 //...PASSPORT CONFIG....
 app.use(cookiesession({

@@ -1,6 +1,7 @@
 const express = require("express");
 const mongoose = require("mongoose");
 const passport = require("passport");
+const bodyparser = require("body-parser");
 const cookiesession = require("cookie-session");
 const GoogleStrategy = require("passport-google-oauth20").Strategy;
 const app = express();
@@ -11,6 +12,7 @@ require("./services/passport/passport");
 
 //....APP CONFIG.....
 app.use(express.static(__dirname + "/services"));
+app.use(bodyparser.json());
 
 
 //....MONGODB CONFIG....
@@ -35,6 +37,7 @@ app.get("/", (req, res) => {
 
 //....ROUTES.....
 require("./routes/auth")(app);
+require("./routes/billing")(app);
 
 PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {

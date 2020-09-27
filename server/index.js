@@ -39,6 +39,18 @@ app.get("/", (req, res) => {
 require("./routes/auth")(app);
 require("./routes/billing")(app);
 
+if (process.env.NODE_ENV === "production") {
+    // express serves up production assets (main.js, main.css, etc)
+    app.use(express.static("client/build")); // if we don't understand a request, look in the client/build and see if the file is there
+
+    // express sers up index.html file if it doesn't recognize the route
+    // kick the user to the client-side application
+    const path = require("path");
+    app.get("*", (req, res) => {
+        res.sendFile(path.resolve(__dirname, "client", "build", "index.html"));
+    }) 
+}
+
 PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
     console.log(`Listening on ${PORT}...`);

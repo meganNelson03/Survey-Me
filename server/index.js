@@ -30,6 +30,12 @@ app.use(passport.initialize());
 app.use(passport.session())
 
 //....ROUTES.....
+
+app.get("/", (req, res) => {
+    res.send({pub_key: keys.STRIPE_PUBLISHABLE_KEY});
+})
+
+
 require("./routes/auth")(app);
 require("./routes/billing")(app);
 

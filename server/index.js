@@ -8,6 +8,7 @@ const app = express();
 
 const keys = require("./config/keys");
 require("./models/User.js");
+require("./models/Survey.js");
 require("./services/passport/passport");
 
 //....APP CONFIG.....
@@ -31,13 +32,9 @@ app.use(passport.session())
 
 //....ROUTES.....
 
-app.get("/", (req, res) => {
-    res.send({pub_key: keys.STRIPE_PUBLISHABLE_KEY});
-})
-
-
 require("./routes/auth")(app);
 require("./routes/billing")(app);
+require("./routes/survey")(app);
 
 if (process.env.NODE_ENV === "production") {
     // express serves up production assets (main.js, main.css, etc)

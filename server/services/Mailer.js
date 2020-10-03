@@ -8,6 +8,7 @@ class Mailer extends helper.Mail {
     constructor({ subject, recipients }, content) {
         super();
 
+        this.sgApi = sendgrid(keys.SENDGRID_KEY);
         this.from_email = new helper.Email("meganannnelson01@gmail.com");
         this.subject = subject;
         this.body = new helper.Content("text/html", content);
@@ -40,6 +41,19 @@ class Mailer extends helper.Mail {
 
         this.addPersonalization(personalize);
     }
+
+    async send() {
+        const request = this.sgApi.emptyRequest({
+            method: "POST",
+            path: "/v3/mail/send",
+            body: this.toJSON()
+        });
+
+        const response = await this.sgApi.API(request);
+        return response;
+    }
+
+  
 
 }
 

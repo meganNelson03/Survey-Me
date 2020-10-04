@@ -17,7 +17,7 @@ app.use(bodyparser.json());
 
 
 //....MONGODB CONFIG....
-mongoose.connect(keys.MONGODB_URI, (err, connection) => {
+mongoose.connect(keys.MONGODB_URI, { useNewUrlParser: true }, (err, connection) => {
     if (err) throw err;
     console.log("Connection successful.")
 });
